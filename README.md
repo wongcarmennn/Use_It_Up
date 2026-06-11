@@ -1,5 +1,7 @@
 # 🥦 Habis First — Use what you have, first.
 
+"Habis" means finish in Malay. 
+
 A family pantry manager that helps Malaysian households waste less food. Log what's in your fridge, get alerted before things expire, and find recipes based on what you already have.
 
 Built with React Native · iOS-first
