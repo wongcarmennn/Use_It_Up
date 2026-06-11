@@ -2,7 +2,7 @@
 
 A family pantry manager that helps households waste less food. Log what's in your fridge, get alerted before things expire, and find recipes based on what you already have.
 
-Built for Malaysian families, iOS-first.
+iOS-first
 
 ---
 
