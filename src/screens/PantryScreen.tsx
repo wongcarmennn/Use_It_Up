@@ -3,11 +3,12 @@ import { View, Text, TouchableOpacity, StyleSheet, SectionList, Alert, ScrollVie
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { differenceInDays } from 'date-fns';
+import { Ionicons } from '@expo/vector-icons';
 
 import { PantryItem, StorageLocation } from '../types';
 import { subscribeToItems, markConsumed } from '../services/firebase';
 import { useAuthStore } from '../store/authStore';
-import { COLORS, CATEGORY_EMOJI, LOCATION_EMOJI, RADIUS, SHADOWS, TYPOGRAPHY } from '../theme';
+import { COLORS, CATEGORY_ICON, LOCATION_ICON, RADIUS, SHADOWS, TYPOGRAPHY } from '../theme';
 import { PantryStackParams } from '../navigation/AppNavigator';
 
 type Nav = NativeStackNavigationProp<PantryStackParams, 'PantryHome'>;
@@ -30,6 +31,11 @@ function expiryLabel(expiryDate: Date): string {
 const STATUS_COLOR = { expired: COLORS.danger, warning: COLORS.warning, fresh: COLORS.safe };
 const STATUS_PALE  = { expired: COLORS.dangerPale, warning: COLORS.warningPale, fresh: COLORS.safePale };
 
+function CategoryIcon({ category, size = 20, color = COLORS.textSecondary }: { category: string; size?: number; color?: string }) {
+  const name = (CATEGORY_ICON[category] ?? 'cube-outline') as any;
+  return <Ionicons name={name} size={size} color={color} />;
+}
+
 function UseFirstSection({ items, warningDays, onPress }: {
   items: PantryItem[]; warningDays: number; onPress: (id: string) => void;
 }) {
@@ -38,7 +44,10 @@ function UseFirstSection({ items, warningDays, onPress }: {
   return (
     <View style={useFirstStyles.container}>
       <View style={useFirstStyles.header}>
-        <Text style={useFirstStyles.title}>⚡ Use First</Text>
+        <View style={useFirstStyles.titleRow}>
+          <Ionicons name="alert-circle-outline" size={16} color={COLORS.warning} />
+          <Text style={useFirstStyles.title}>Use First</Text>
+        </View>
         <Text style={useFirstStyles.subtitle}>{urgent.length} item{urgent.length !== 1 ? 's' : ''} need attention</Text>
       </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={useFirstStyles.scroll}>
@@ -49,7 +58,9 @@ function UseFirstSection({ items, warningDays, onPress }: {
           return (
             <TouchableOpacity key={item.id} style={[useFirstStyles.card, { borderColor: color, backgroundColor: pale }]}
               onPress={() => onPress(item.id)} activeOpacity={0.75}>
-              <Text style={useFirstStyles.emoji}>{CATEGORY_EMOJI[item.category]}</Text>
+              <View style={[useFirstStyles.iconCircle, { backgroundColor: color + '22' }]}>
+                <CategoryIcon category={item.category} size={20} color={color} />
+              </View>
               <Text style={useFirstStyles.name} numberOfLines={2}>{item.name}</Text>
               <View style={[useFirstStyles.pill, { backgroundColor: color }]}>
                 <Text style={useFirstStyles.pillText}>{expiryLabel(item.expiryDate)}</Text>
@@ -67,7 +78,8 @@ const useFirstStyles = StyleSheet.create({
     backgroundColor: COLORS.surface, borderBottomWidth: 1,
     borderBottomColor: COLORS.border, paddingBottom: 16,
   },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', paddingHorizontal: 16, paddingTop: 14, paddingBottom: 10 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingTop: 14, paddingBottom: 10 },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   title: { ...TYPOGRAPHY.h3, color: COLORS.text },
   subtitle: { ...TYPOGRAPHY.caption, color: COLORS.gray },
   scroll: { paddingHorizontal: 16, gap: 10 },
@@ -75,7 +87,10 @@ const useFirstStyles = StyleSheet.create({
     width: 110, borderRadius: RADIUS.md, borderWidth: 1.5,
     padding: 12, gap: 6, alignItems: 'center',
   },
-  emoji: { fontSize: 34 },
+  iconCircle: {
+    width: 44, height: 44, borderRadius: 22,
+    justifyContent: 'center', alignItems: 'center',
+  },
   name: { ...TYPOGRAPHY.label, color: COLORS.text, textAlign: 'center', lineHeight: 16 },
   pill: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: RADIUS.xl, marginTop: 2 },
   pillText: { fontSize: 10, fontWeight: '700', color: COLORS.white },
@@ -91,7 +106,9 @@ function ItemCard({ item, warningDays, onPress, onConsume }: {
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.75}>
       <View style={[styles.statusStrip, { backgroundColor: color }]} />
       <View style={styles.cardBody}>
-        <Text style={styles.cardEmoji}>{CATEGORY_EMOJI[item.category]}</Text>
+        <View style={[styles.cardIconCircle, { backgroundColor: COLORS.background }]}>
+          <CategoryIcon category={item.category} size={20} color={COLORS.textSecondary} />
+        </View>
         <View style={styles.cardMid}>
           <Text style={styles.cardName} numberOfLines={1}>{item.name}</Text>
           {item.brand ? <Text style={styles.cardBrand}>{item.brand}</Text> : null}
@@ -105,17 +122,17 @@ function ItemCard({ item, warningDays, onPress, onConsume }: {
         </View>
       </View>
       <TouchableOpacity style={styles.checkBtn} onPress={onConsume}>
-        <Text style={styles.checkIcon}>✓</Text>
+        <Ionicons name="checkmark" size={22} color={COLORS.primary} />
       </TouchableOpacity>
     </TouchableOpacity>
   );
 }
 
-const LOCATIONS: { key: StorageLocation | 'all'; label: string }[] = [
-  { key: 'all',     label: '🧺  All'     },
-  { key: 'fridge',  label: '🧊  Fridge'  },
-  { key: 'freezer', label: '❄️  Freezer' },
-  { key: 'pantry',  label: '🏠  Pantry'  },
+const LOCATIONS: { key: StorageLocation | 'all'; label: string; icon: string }[] = [
+  { key: 'all',     label: 'All',     icon: 'apps-outline'          },
+  { key: 'fridge',  label: 'Fridge',  icon: 'thermometer-outline'   },
+  { key: 'freezer', label: 'Freezer', icon: 'snow-outline'          },
+  { key: 'pantry',  label: 'Pantry',  icon: 'home-outline'          },
 ];
 
 export default function PantryScreen() {
@@ -141,7 +158,8 @@ export default function PantryScreen() {
       groups[item.location].push(item);
     });
     return Object.entries(groups).map(([loc, data]) => ({
-      title: `${LOCATION_EMOJI[loc]}  ${loc.charAt(0).toUpperCase() + loc.slice(1)}`,
+      title: loc.charAt(0).toUpperCase() + loc.slice(1),
+      icon: (LOCATION_ICON[loc] ?? 'cube-outline') as any,
       data,
     }));
   }, [filtered]);
@@ -153,14 +171,13 @@ export default function PantryScreen() {
     ]);
 
   const firstName = user?.displayName?.split(' ')[0] ?? 'there';
-  const urgentCount = items.filter((i) => getExpiryStatus(i.expiryDate, warningDays) !== 'fresh').length;
 
   return (
     <View style={styles.container}>
       {/* Greeting header */}
       <View style={styles.greeting}>
         <View>
-          <Text style={styles.greetingHi}>Hi {firstName} 👋</Text>
+          <Text style={styles.greetingHi}>Hi {firstName}</Text>
           <Text style={styles.greetingHousehold}>{household?.name}</Text>
         </View>
         <View style={styles.greetingBadge}>
@@ -175,7 +192,7 @@ export default function PantryScreen() {
         onPress={(id) => navigation.navigate('ItemDetail', { itemId: id })}
       />
 
-      {/* Filter chips — plain View row, NOT FlatList, to prevent height stretching */}
+      {/* Filter chips */}
       <View style={styles.filterBar}>
         {LOCATIONS.map((loc) => (
           <TouchableOpacity
@@ -183,6 +200,11 @@ export default function PantryScreen() {
             style={[styles.filterChip, filter === loc.key && styles.filterChipActive]}
             onPress={() => setFilter(loc.key)}
           >
+            <Ionicons
+              name={loc.icon as any}
+              size={13}
+              color={filter === loc.key ? COLORS.white : COLORS.textSecondary}
+            />
             <Text style={[styles.filterChipText, filter === loc.key && styles.filterChipTextActive]}>
               {loc.label}
             </Text>
@@ -192,7 +214,9 @@ export default function PantryScreen() {
 
       {items.length === 0 ? (
         <View style={styles.empty}>
-          <Text style={styles.emptyEmoji}>🧺</Text>
+          <View style={styles.emptyIconCircle}>
+            <Ionicons name="basket-outline" size={48} color={COLORS.lightGray} />
+          </View>
           <Text style={styles.emptyTitle}>Your pantry is empty</Text>
           <Text style={styles.emptySubtitle}>Tap + to add your first item</Text>
         </View>
@@ -201,9 +225,10 @@ export default function PantryScreen() {
           sections={sections}
           keyExtractor={(item) => item.id}
           stickySectionHeadersEnabled={false}
-          renderSectionHeader={({ section: { title } }) => (
+          renderSectionHeader={({ section }) => (
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>{title}</Text>
+              <Ionicons name={(section as any).icon} size={13} color={COLORS.gray} />
+              <Text style={styles.sectionHeaderText}>{(section as any).title}</Text>
             </View>
           )}
           renderItem={({ item }) => (
@@ -220,10 +245,10 @@ export default function PantryScreen() {
 
       <View style={styles.fabRow}>
         <TouchableOpacity style={[styles.fab, styles.fabScan]} onPress={() => navigation.navigate('Scanner')}>
-          <Text style={styles.fabIcon}>📷</Text>
+          <Ionicons name="camera-outline" size={26} color={COLORS.white} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('AddItem', {})}>
-          <Text style={styles.fabIcon}>＋</Text>
+          <Ionicons name="add" size={30} color={COLORS.white} />
         </TouchableOpacity>
       </View>
     </View>
@@ -238,14 +263,18 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: COLORS.border,
   },
   filterChip: {
-    paddingHorizontal: 14, paddingVertical: 7, borderRadius: RADIUS.xl,
+    flexDirection: 'row', alignItems: 'center', gap: 5,
+    paddingHorizontal: 12, paddingVertical: 7, borderRadius: RADIUS.xl,
     backgroundColor: COLORS.background, borderWidth: 1.5, borderColor: COLORS.border,
   },
   filterChipActive: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
   filterChipText: { ...TYPOGRAPHY.label, color: COLORS.textSecondary },
   filterChipTextActive: { color: COLORS.white },
 
-  sectionHeader: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 6 },
+  sectionHeader: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    paddingHorizontal: 20, paddingTop: 20, paddingBottom: 6,
+  },
   sectionHeaderText: { ...TYPOGRAPHY.label, color: COLORS.gray, textTransform: 'uppercase', letterSpacing: 1 },
 
   listContent: { paddingBottom: 110 },
@@ -258,7 +287,11 @@ const styles = StyleSheet.create({
   },
   statusStrip: { width: 5 },
   cardBody: { flex: 1, flexDirection: 'row', alignItems: 'center', paddingVertical: 14, paddingHorizontal: 14, gap: 12 },
-  cardEmoji: { fontSize: 32 },
+  cardIconCircle: {
+    width: 40, height: 40, borderRadius: 20,
+    justifyContent: 'center', alignItems: 'center',
+    borderWidth: 1, borderColor: COLORS.border,
+  },
   cardMid: { flex: 1, gap: 3 },
   cardName: { ...TYPOGRAPHY.h3, color: COLORS.text },
   cardBrand: { ...TYPOGRAPHY.caption, color: COLORS.gray },
@@ -269,10 +302,12 @@ const styles = StyleSheet.create({
   cardUnit: { ...TYPOGRAPHY.caption, color: COLORS.gray },
 
   checkBtn: { width: 50, backgroundColor: COLORS.primaryPale, justifyContent: 'center', alignItems: 'center' },
-  checkIcon: { fontSize: 20, color: COLORS.primary },
 
-  empty: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 10 },
-  emptyEmoji: { fontSize: 64 },
+  empty: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 12 },
+  emptyIconCircle: {
+    width: 88, height: 88, borderRadius: 44,
+    backgroundColor: COLORS.border, justifyContent: 'center', alignItems: 'center',
+  },
   emptyTitle: { ...TYPOGRAPHY.h2, color: COLORS.darkGray },
   emptySubtitle: { ...TYPOGRAPHY.body, color: COLORS.gray },
 
@@ -288,7 +323,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, paddingTop: 16, paddingBottom: 14,
     backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: COLORS.border,
   },
-  greetingHi: { fontSize: 22, fontWeight: '700', color: COLORS.text, letterSpacing: -0.3 },
+  greetingHi: { fontFamily: 'PlayfairDisplay_700Bold', fontSize: 22, color: COLORS.text, letterSpacing: -0.3 },
   greetingHousehold: { ...TYPOGRAPHY.caption, color: COLORS.gray, marginTop: 2 },
   greetingBadge: {
     alignItems: 'center', backgroundColor: COLORS.ctaPale,
@@ -296,5 +331,4 @@ const styles = StyleSheet.create({
   },
   greetingCount: { fontSize: 22, fontWeight: '700', color: COLORS.cta },
   greetingLabel: { fontSize: 11, color: COLORS.cta, fontWeight: '500' },
-  fabIcon: { fontSize: 24, color: COLORS.white },
 });

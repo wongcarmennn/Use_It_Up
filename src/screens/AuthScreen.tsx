@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import {
+  View, Text, StyleSheet, ActivityIndicator, Alert, Image,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
 import { signInWithGoogle } from '../services/firebase';
 import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '../theme';
@@ -22,28 +25,22 @@ export default function AuthScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.hero}>
-        <Text style={styles.heroEmoji}>🥦</Text>
-        <Text style={styles.appName}>UseItUp</Text>
-        <Text style={styles.tagline}>One pantry.{'\n'}The whole family.</Text>
+      {/* App name + tagline */}
+      <View style={styles.header}>
+        <Text style={styles.appName}>Habis First</Text>
+        <Text style={styles.tagline}>One pantry. The whole family.</Text>
       </View>
 
-      <View style={styles.features}>
-        {[
-          { emoji: '📷', label: 'Scan & add', text: 'Add items instantly with a barcode scan' },
-          { emoji: '🔔', label: 'Smart alerts', text: 'Get notified before food expires' },
-          { emoji: '👨‍👩‍👧', label: 'Family sharing', text: 'One pantry for your whole household' },
-        ].map((f) => (
-          <View key={f.label} style={styles.featureCard}>
-            <Text style={styles.featureEmoji}>{f.emoji}</Text>
-            <View style={styles.featureText}>
-              <Text style={styles.featureLabel}>{f.label}</Text>
-              <Text style={styles.featureDesc}>{f.text}</Text>
-            </View>
-          </View>
-        ))}
+      {/* Hero illustration — swap require path to hero-illustration.png once saved to /assets */}
+      <View style={styles.imageContainer}>
+        <Image
+          source={require('../../assets/icon.png')}
+          style={styles.heroImage}
+          resizeMode="contain"
+        />
       </View>
 
+      {/* Sign in */}
       <View style={styles.footer}>
         {loading ? (
           <ActivityIndicator size="large" color={COLORS.primary} style={{ height: 52 }} />
@@ -51,12 +48,12 @@ export default function AuthScreen() {
           <GoogleSigninButton
             style={styles.googleBtn}
             size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.Dark}
+            color={GoogleSigninButton.Color.Light}
             onPress={handleGoogleSignIn}
           />
         )}
         <Text style={styles.legal}>
-          By signing in you agree to use UseItUp only for household pantry tracking. 🧺
+          By signing in you agree to use Habis First only for household pantry tracking.
         </Text>
       </View>
     </View>
@@ -65,28 +62,37 @@ export default function AuthScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, backgroundColor: COLORS.background,
-    paddingHorizontal: 28, justifyContent: 'space-between',
-    paddingTop: 80, paddingBottom: 48,
+    flex: 1,
+    backgroundColor: COLORS.background,
+    paddingHorizontal: 28,
+    paddingTop: 72,
+    paddingBottom: 48,
+    justifyContent: 'space-between',
   },
-  hero: { alignItems: 'center', gap: 10 },
-  heroEmoji: { fontSize: 80 },
-  appName: { fontSize: 40, fontWeight: '800', color: COLORS.primary, letterSpacing: -1.5 },
-  tagline: { fontSize: 19, color: COLORS.textSecondary, textAlign: 'center', lineHeight: 28, fontWeight: '500' },
 
-  features: { gap: 12 },
-  featureCard: {
-    flexDirection: 'row', alignItems: 'center', gap: 14,
-    backgroundColor: COLORS.surface, borderRadius: RADIUS.md,
-    padding: 16, borderWidth: 1, borderColor: COLORS.border,
-    ...SHADOWS.sm,
+  header: { alignItems: 'center', gap: 8 },
+  appName: {
+    fontFamily: 'PlayfairDisplay_700Bold', fontSize: 42, color: COLORS.primary,
+    letterSpacing: -1,
   },
-  featureEmoji: { fontSize: 28, width: 38, textAlign: 'center' },
-  featureText: { flex: 1 },
-  featureLabel: { ...TYPOGRAPHY.h3, color: COLORS.text },
-  featureDesc: { ...TYPOGRAPHY.caption, color: COLORS.gray, marginTop: 2, lineHeight: 17 },
+  tagline: {
+    fontFamily: 'Inter_400Regular', fontSize: 17, color: COLORS.textSecondary,
+    textAlign: 'center', lineHeight: 26,
+  },
 
-  footer: { alignItems: 'center', gap: 14 },
-  googleBtn: { width: 240, height: 52 },
-  legal: { ...TYPOGRAPHY.caption, color: COLORS.lightGray, textAlign: 'center', lineHeight: 18 },
+  imageContainer: {
+    flex: 1, justifyContent: 'center', alignItems: 'center',
+    paddingVertical: 16,
+  },
+  heroImage: {
+    width: '100%',
+    height: '100%',
+  },
+
+  footer: { alignItems: 'center', gap: 12 },
+  googleBtn: { width: '100%', height: 52 },
+  legal: {
+    ...TYPOGRAPHY.caption, color: COLORS.lightGray,
+    textAlign: 'center', lineHeight: 18,
+  },
 });

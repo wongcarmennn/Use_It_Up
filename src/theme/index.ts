@@ -1,43 +1,43 @@
 export const COLORS = {
   // Backgrounds
-  background: '#FDF8F2',
+  background: '#FAF7F2',
   surface: '#FFFFFF',
-  surfaceWarm: '#FFF6EC',
+  surfaceWarm: '#F5F0E8',
 
-  // Brand
-  primary: '#2D6A4F',
-  primaryLight: '#52B788',
-  primaryPale: '#D8F3DC',
-  primaryDark: '#1B4332',
+  // Brand — Sage & Honey
+  primary: '#8FA88D',
+  primaryLight: '#ADBFAB',
+  primaryPale: '#E4EDE3',
+  primaryDark: '#6B8A69',
 
   // Status
-  danger: '#D95F3B',
+  danger: '#C85C3A',
   dangerPale: '#FDEEE9',
-  warning: '#E8954A',
-  warningPale: '#FEF3E7',
-  safe: '#40916C',
-  safePale: '#D8F3DC',
+  warning: '#C8883A',
+  warningPale: '#FBF0E3',
+  safe: '#7A9E78',
+  safePale: '#E4EDE3',
 
-  // Text
-  text: '#2D2013',
-  textSecondary: '#6B5744',
-  gray: '#9E8E7E',
-  lightGray: '#C4B8AB',
+  // Text — Warm Earthy Brown
+  text: '#4A3B32',
+  textSecondary: '#7A6558',
+  gray: '#9A8E84',
+  lightGray: '#BEB5AC',
 
   // Structure
-  border: '#EAE0D5',
-  divider: '#F5EDE3',
+  border: '#E5DDD5',
+  divider: '#F0E9E2',
 
-  // Terracotta — warm CTA color
+  // Honey/Terracotta — warm CTA
   cta: '#C07050',
   ctaPale: '#F5EBE4',
 
   // Legacy aliases for compatibility
   white: '#FFFFFF',
-  offWhite: '#FDF8F2',
-  darkGray: '#4A3828',
+  offWhite: '#FAF7F2',
+  darkGray: '#4A3B32',
   accent: '#C07050',
-  shadow: 'rgba(123,92,58,0.10)',
+  shadow: 'rgba(74,59,50,0.10)',
 };
 
 export const RADIUS = {
@@ -65,14 +65,15 @@ export const SHADOWS = {
 };
 
 export const TYPOGRAPHY = {
-  h1: { fontSize: 26, fontWeight: '700' as const, letterSpacing: -0.5 },
-  h2: { fontSize: 20, fontWeight: '700' as const, letterSpacing: -0.3 },
-  h3: { fontSize: 16, fontWeight: '600' as const },
-  body: { fontSize: 15, fontWeight: '400' as const },
-  label: { fontSize: 12, fontWeight: '600' as const, letterSpacing: 0.5 },
-  caption: { fontSize: 12, fontWeight: '400' as const },
+  h1: { fontFamily: 'PlayfairDisplay_700Bold', fontSize: 26, letterSpacing: -0.5 },
+  h2: { fontFamily: 'PlayfairDisplay_700Bold', fontSize: 20, letterSpacing: -0.3 },
+  h3: { fontFamily: 'Inter_600SemiBold', fontSize: 16 },
+  body: { fontFamily: 'Inter_400Regular', fontSize: 15 },
+  label: { fontFamily: 'Inter_600SemiBold', fontSize: 12, letterSpacing: 0.5 },
+  caption: { fontFamily: 'Inter_400Regular', fontSize: 12 },
 };
 
+// Legacy — kept for any remaining references
 export const CATEGORY_EMOJI: Record<string, string> = {
   dairy: '🥛', meat: '🥩', seafood: '🐟', vegetables: '🥦', fruits: '🍎',
   beverages: '🧃', snacks: '🍿', condiments: '🫙', grains: '🌾', frozen: '🧊', other: '📦',
@@ -80,4 +81,26 @@ export const CATEGORY_EMOJI: Record<string, string> = {
 
 export const LOCATION_EMOJI: Record<string, string> = {
   fridge: '🧊', freezer: '❄️', pantry: '🏠', other: '📦',
+};
+
+// Ionicons names for categories and locations
+export const CATEGORY_ICON: Record<string, string> = {
+  dairy: 'water-outline',
+  meat: 'nutrition-outline',
+  seafood: 'fish-outline',
+  vegetables: 'leaf-outline',
+  fruits: 'rose-outline',
+  beverages: 'cafe-outline',
+  snacks: 'fast-food-outline',
+  condiments: 'flask-outline',
+  grains: 'layers-outline',
+  frozen: 'snow-outline',
+  other: 'cube-outline',
+};
+
+export const LOCATION_ICON: Record<string, string> = {
+  fridge: 'thermometer-outline',
+  freezer: 'snow-outline',
+  pantry: 'home-outline',
+  other: 'ellipsis-horizontal-outline',
 };

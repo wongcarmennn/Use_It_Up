@@ -1,64 +1,76 @@
 import React, { useRef, useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
-  FlatList, Dimensions, Animated,
+  FlatList, Dimensions,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { COLORS, TYPOGRAPHY } from '../theme';
+import { Ionicons } from '@expo/vector-icons';
+import { COLORS, TYPOGRAPHY, RADIUS } from '../theme';
 
 const { width } = Dimensions.get('window');
 
 const SLIDES = [
   {
     key: '1',
-    illustration: ['🥛', '🥩', '🥦', '🍎', '🧊'],
+    icon: 'basket-outline',
+    iconColor: '#2D6A4F',
+    bgOuter: '#D8F3DC',
+    bgInner: '#B7E4C7',
     title: 'Know what you have',
     subtitle: 'Add items from your fridge, freezer and pantry in seconds — or just scan the barcode.',
   },
   {
     key: '2',
-    illustration: ['⚡', '🔔', '📅', '✓', '🌿'],
+    icon: 'notifications-outline',
+    iconColor: '#C07050',
+    bgOuter: '#F5EBE4',
+    bgInner: '#EAD5C8',
     title: 'Nothing goes to waste',
     subtitle: 'Get notified before food expires so you always use it in time.',
   },
   {
     key: '3',
-    illustration: ['👨‍👩‍👧', '🏡', '🤝', '✨', '🧺'],
-    title: 'Your family\'s pantry',
+    icon: 'people-outline',
+    iconColor: '#2D6A4F',
+    bgOuter: '#D8F3DC',
+    bgInner: '#B7E4C7',
+    title: "Your family's pantry",
     subtitle: 'Everyone in the household sees the same pantry, updated in real time.',
   },
 ];
 
-function Illustration({ emojis }: { emojis: string[] }) {
-  const [center, ...corners] = emojis;
-  const positions = [
-    { top: 10, left: 30 },
-    { top: 10, right: 30 },
-    { bottom: 10, left: 30 },
-    { bottom: 10, right: 30 },
-  ];
+function SlideIllustration({ icon, iconColor, bgOuter, bgInner }: {
+  icon: string; iconColor: string; bgOuter: string; bgInner: string;
+}) {
   return (
     <View style={illStyles.wrapper}>
-      <View style={illStyles.circle}>
-        <Text style={illStyles.center}>{center}</Text>
-        {corners.map((emoji, i) => (
-          <Text key={i} style={[illStyles.corner, positions[i]]}>{emoji}</Text>
-        ))}
+      <View style={[illStyles.ringOuter, { backgroundColor: bgOuter }]}>
+        <View style={[illStyles.ringInner, { backgroundColor: bgInner }]}>
+          <View style={[illStyles.iconCircle, { backgroundColor: '#fff' }]}>
+            <Ionicons name={icon as any} size={64} color={iconColor} />
+          </View>
+        </View>
       </View>
     </View>
   );
 }
 
 const illStyles = StyleSheet.create({
-  wrapper: { alignItems: 'center', marginBottom: 40 },
-  circle: {
+  wrapper: { alignItems: 'center', marginBottom: 48 },
+  ringOuter: {
     width: 220, height: 220, borderRadius: 110,
-    backgroundColor: '#F2EBE0',
     justifyContent: 'center', alignItems: 'center',
-    position: 'relative',
   },
-  center: { fontSize: 80 },
-  corner: { position: 'absolute', fontSize: 32 },
+  ringInner: {
+    width: 170, height: 170, borderRadius: 85,
+    justifyContent: 'center', alignItems: 'center',
+  },
+  iconCircle: {
+    width: 120, height: 120, borderRadius: 60,
+    justifyContent: 'center', alignItems: 'center',
+    shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08, shadowRadius: 12, elevation: 4,
+  },
 });
 
 export const ONBOARDING_KEY = '@useitup_onboarded';
@@ -93,28 +105,30 @@ export default function OnboardingScreen({ onDone }: { onDone: () => void }) {
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        scrollEnabled={true}
         onMomentumScrollEnd={(e) => {
           const index = Math.round(e.nativeEvent.contentOffset.x / width);
           setActiveIndex(index);
         }}
         renderItem={({ item }) => (
           <View style={styles.slide}>
-            <Illustration emojis={item.illustration} />
+            <SlideIllustration
+              icon={item.icon}
+              iconColor={item.iconColor}
+              bgOuter={item.bgOuter}
+              bgInner={item.bgInner}
+            />
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.subtitle}>{item.subtitle}</Text>
           </View>
         )}
       />
 
-      {/* Dots */}
       <View style={styles.dots}>
         {SLIDES.map((_, i) => (
           <View key={i} style={[styles.dot, i === activeIndex && styles.dotActive]} />
         ))}
       </View>
 
-      {/* CTA */}
       <TouchableOpacity style={styles.btn} onPress={handleNext}>
         <Text style={styles.btnText}>
           {activeIndex < SLIDES.length - 1 ? 'Next' : 'Get Started'}
@@ -126,7 +140,7 @@ export default function OnboardingScreen({ onDone }: { onDone: () => void }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, backgroundColor: '#FAF5EE',
+    flex: 1, backgroundColor: COLORS.background,
     paddingBottom: 48,
   },
   skip: { alignSelf: 'flex-end', padding: 20, paddingBottom: 0 },
@@ -138,11 +152,11 @@ const styles = StyleSheet.create({
     paddingTop: 60,
   },
   title: {
-    fontSize: 28, fontWeight: '700', color: COLORS.text,
+    fontFamily: 'PlayfairDisplay_700Bold', fontSize: 28, color: COLORS.text,
     textAlign: 'center', letterSpacing: -0.5, marginBottom: 14,
   },
   subtitle: {
-    ...TYPOGRAPHY.body, color: COLORS.textSecondary,
+    fontFamily: 'Inter_400Regular', fontSize: 15, color: COLORS.textSecondary,
     textAlign: 'center', lineHeight: 24,
   },
 
@@ -152,7 +166,7 @@ const styles = StyleSheet.create({
 
   btn: {
     marginHorizontal: 24, backgroundColor: COLORS.cta,
-    borderRadius: 999, paddingVertical: 17, alignItems: 'center',
+    borderRadius: RADIUS.xl, paddingVertical: 17, alignItems: 'center',
     shadowColor: COLORS.cta, shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3, shadowRadius: 8, elevation: 4,
   },

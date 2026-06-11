@@ -6,11 +6,12 @@ import {
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format, addDays } from 'date-fns';
+import { Ionicons } from '@expo/vector-icons';
 
 import { Category, StorageLocation } from '../types';
 import { addItem } from '../services/firebase';
 import { useAuthStore } from '../store/authStore';
-import { COLORS, CATEGORY_EMOJI, LOCATION_EMOJI, RADIUS, SHADOWS, TYPOGRAPHY } from '../theme';
+import { COLORS, CATEGORY_ICON, LOCATION_ICON, RADIUS, SHADOWS, TYPOGRAPHY } from '../theme';
 import { PantryStackParams } from '../navigation/AppNavigator';
 import { scheduleExpiryNotification } from '../services/notifications';
 
@@ -91,7 +92,11 @@ export default function AddItemScreen() {
               <TouchableOpacity key={cat}
                 style={[styles.chip, category === cat && styles.chipActive]}
                 onPress={() => setCategory(cat)}>
-                <Text style={styles.chipEmoji}>{CATEGORY_EMOJI[cat]}</Text>
+                <Ionicons
+                  name={(CATEGORY_ICON[cat] ?? 'cube-outline') as any}
+                  size={14}
+                  color={category === cat ? COLORS.white : COLORS.textSecondary}
+                />
                 <Text style={[styles.chipText, category === cat && styles.chipTextActive]}>
                   {cat.charAt(0).toUpperCase() + cat.slice(1)}
                 </Text>
@@ -107,7 +112,11 @@ export default function AddItemScreen() {
               <TouchableOpacity key={loc}
                 style={[styles.chip, styles.chipGrow, location === loc && styles.chipActive]}
                 onPress={() => setLocation(loc)}>
-                <Text style={styles.chipEmoji}>{LOCATION_EMOJI[loc]}</Text>
+                <Ionicons
+                  name={(LOCATION_ICON[loc] ?? 'cube-outline') as any}
+                  size={14}
+                  color={location === loc ? COLORS.white : COLORS.textSecondary}
+                />
                 <Text style={[styles.chipText, location === loc && styles.chipTextActive]}>
                   {loc.charAt(0).toUpperCase() + loc.slice(1)}
                 </Text>
@@ -141,7 +150,7 @@ export default function AddItemScreen() {
         <View style={styles.card}>
           <Text style={styles.label}>EXPIRY DATE</Text>
           <TouchableOpacity style={styles.dateBtn} onPress={() => setShowDatePicker(true)}>
-            <Text style={styles.dateBtnEmoji}>📅</Text>
+            <Ionicons name="calendar-outline" size={18} color={COLORS.textSecondary} />
             <Text style={styles.dateBtnText}>{format(expiryDate, 'dd MMM yyyy')}</Text>
           </TouchableOpacity>
         </View>
@@ -153,7 +162,7 @@ export default function AddItemScreen() {
         />
 
         <TouchableOpacity style={[styles.saveBtn, saving && { opacity: 0.6 }]} onPress={handleSave} disabled={saving}>
-          <Text style={styles.saveBtnText}>{saving ? 'Saving…' : '✓  Add to Pantry'}</Text>
+          <Text style={styles.saveBtnText}>{saving ? 'Saving…' : 'Add to Pantry'}</Text>
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -190,7 +199,6 @@ const styles = StyleSheet.create({
   },
   chipGrow: { flex: 1, justifyContent: 'center' },
   chipActive: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
-  chipEmoji: { fontSize: 15 },
   chipText: { fontSize: 13, color: COLORS.textSecondary, fontWeight: '500' },
   chipTextActive: { color: COLORS.white },
 
@@ -199,7 +207,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background, borderRadius: RADIUS.sm,
     borderWidth: 1, borderColor: COLORS.border, paddingHorizontal: 14, paddingVertical: 12,
   },
-  dateBtnEmoji: { fontSize: 18 },
   dateBtnText: { ...TYPOGRAPHY.body, color: COLORS.text, fontWeight: '500' },
 
   saveBtn: {

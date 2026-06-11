@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#2D6A4F"
+      "backgroundColor": "#8FA88D"
     },
     "plugins": [
       [
@@ -22,14 +22,15 @@
         "expo-notifications",
         {
           "icon": "./assets/notification-icon.png",
-          "color": "#2D6A4F"
+          "color": "#8FA88D"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#2D6A4F"
+        "backgroundColor": "#8FA88D"
       },
       "package": "com.habisfirst.app",
       "permissions": [

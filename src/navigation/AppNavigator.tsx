@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -52,7 +52,7 @@ function PantryStackNavigator() {
         headerShadowVisible: false,
       }}
     >
-      <PantryStack.Screen name="PantryHome" component={PantryScreen} options={{ title: '🥦  Habis First' }} />
+      <PantryStack.Screen name="PantryHome" component={PantryScreen} options={{ title: 'Habis First' }} />
       <PantryStack.Screen name="ItemDetail" component={ItemDetailScreen} options={{ title: 'Item Details' }} />
       <PantryStack.Screen name="AddItem" component={AddItemScreen} options={{ title: 'Add Item' }} />
       <PantryStack.Screen name="Scanner" component={ScannerScreen} options={{ headerShown: false }} />
@@ -70,7 +70,7 @@ function RecipesStackNavigator() {
         headerShadowVisible: false,
       }}
     >
-      <RecipesStack.Screen name="RecipesHome" component={RecipesScreen} options={{ title: '🍳  Recipes' }} />
+      <RecipesStack.Screen name="RecipesHome" component={RecipesScreen} options={{ title: 'Recipes' }} />
       <RecipesStack.Screen name="RecipeDetail" component={RecipeDetailScreen}
         options={({ route }) => ({ title: route.params.title })} />
     </RecipesStack.Navigator>
@@ -128,7 +128,7 @@ export default function AppNavigator() {
             component={PantryStackNavigator}
             options={{
               tabBarLabel: 'Pantry',
-              tabBarIcon: () => <Text style={{ fontSize: 20 }}>🧺</Text>,
+              tabBarIcon: ({ color, size }) => <Ionicons name="basket-outline" color={color} size={size} />,
             }}
           />
           <Tab.Screen
@@ -136,7 +136,7 @@ export default function AppNavigator() {
             component={RecipesStackNavigator}
             options={{
               tabBarLabel: 'Recipes',
-              tabBarIcon: () => <Text style={{ fontSize: 20 }}>🍳</Text>,
+              tabBarIcon: ({ color, size }) => <Ionicons name="restaurant-outline" color={color} size={size} />,
             }}
           />
           <Tab.Screen
@@ -144,7 +144,7 @@ export default function AppNavigator() {
             component={SettingsScreen}
             options={{
               tabBarLabel: 'Settings',
-              tabBarIcon: () => <Text style={{ fontSize: 20 }}>⚙️</Text>,
+              tabBarIcon: ({ color, size }) => <Ionicons name="settings-outline" color={color} size={size} />,
               headerShown: true,
               headerTitle: 'Settings',
               headerStyle: { backgroundColor: COLORS.primary },

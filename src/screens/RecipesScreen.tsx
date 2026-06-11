@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
   ActivityIndicator, Image, Alert,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { differenceInDays } from 'date-fns';
@@ -70,7 +71,8 @@ export default function RecipesScreen() {
       >
         {usesExpiring && (
           <View style={styles.urgentBanner}>
-            <Text style={styles.urgentText}>⚡ Uses expiring ingredients</Text>
+            <Ionicons name="flash-outline" size={12} color={COLORS.warning} />
+            <Text style={styles.urgentText}>Uses expiring ingredients</Text>
           </View>
         )}
         <Image source={{ uri: item.image }} style={styles.cardImage} />
@@ -104,7 +106,7 @@ export default function RecipesScreen() {
         {expiringNames.length > 0 && (
           <View style={styles.expiringNote}>
             <Text style={styles.expiringNoteText}>
-              ⚡ {expiringNames.length} ingredient{expiringNames.length !== 1 ? 's' : ''} expiring soon — use them up!
+              {expiringNames.length} ingredient{expiringNames.length !== 1 ? 's' : ''} expiring soon — use them up!
             </Text>
           </View>
         )}
@@ -112,7 +114,8 @@ export default function RecipesScreen() {
 
       {(!searched || recipes.length === 0) && !loading && (
         <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
-          <Text style={styles.searchBtnText}>🍳  Find Recipes</Text>
+          <Ionicons name="restaurant-outline" size={18} color="#fff" style={{ marginRight: 6 }} />
+          <Text style={styles.searchBtnText}>Find Recipes</Text>
         </TouchableOpacity>
       )}
 
@@ -143,7 +146,9 @@ export default function RecipesScreen() {
 
       {!loading && searched && recipes.length === 0 && (
         <View style={styles.empty}>
-          <Text style={styles.emptyEmoji}>🍽</Text>
+          <View style={styles.emptyIconCircle}>
+            <Ionicons name="restaurant-outline" size={48} color={COLORS.lightGray} />
+          </View>
           <Text style={styles.emptyTitle}>No recipes found</Text>
           <Text style={styles.emptySubtitle}>Try adding more items to your pantry</Text>
           <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
@@ -172,7 +177,7 @@ const styles = StyleSheet.create({
 
   searchBtn: {
     margin: 20, backgroundColor: COLORS.cta, borderRadius: 999,
-    paddingVertical: 16, alignItems: 'center',
+    paddingVertical: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     shadowColor: COLORS.cta, shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25, shadowRadius: 8, elevation: 4,
   },
@@ -195,6 +200,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden', borderWidth: 1, borderColor: COLORS.border, ...SHADOWS.sm,
   },
   urgentBanner: {
+    flexDirection: 'row', alignItems: 'center', gap: 5,
     backgroundColor: COLORS.warningPale, paddingHorizontal: 14, paddingVertical: 6,
     borderBottomWidth: 1, borderBottomColor: COLORS.warning,
   },
@@ -214,8 +220,11 @@ const styles = StyleSheet.create({
   },
   matchFill: { height: '100%', backgroundColor: COLORS.primary, borderRadius: 2 },
 
-  empty: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 10, padding: 32 },
-  emptyEmoji: { fontSize: 56 },
+  empty: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 12, padding: 32 },
+  emptyIconCircle: {
+    width: 88, height: 88, borderRadius: 44,
+    backgroundColor: COLORS.border, justifyContent: 'center', alignItems: 'center',
+  },
   emptyTitle: { ...TYPOGRAPHY.h2, color: COLORS.darkGray },
   emptySubtitle: { ...TYPOGRAPHY.body, color: COLORS.gray, textAlign: 'center' },
 });

@@ -7,7 +7,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>UseItUp</string>
+    <string>Habis First</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -43,7 +43,7 @@
       <true/>
     </dict>
     <key>NSCameraUsageDescription</key>
-    <string>UseItUp needs camera access to scan barcodes.</string>
+    <string>Habis First needs camera access to scan barcodes.</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access your microphone</string>
     <key>UILaunchStoryboardName</key>
