@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, ActivityIndicator, Alert, Image,
+  View, Text, StyleSheet, ActivityIndicator, Alert, Image, TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
 import { signInWithGoogle } from '../services/firebase';
 import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '../theme';
 
@@ -31,10 +29,10 @@ export default function AuthScreen() {
         <Text style={styles.tagline}>One pantry. The whole family.</Text>
       </View>
 
-      {/* Hero illustration — swap require path to hero-illustration.png once saved to /assets */}
+      {/* Hero illustration */}
       <View style={styles.imageContainer}>
         <Image
-          source={require('../../assets/icon.png')}
+          source={require('../../assets/hero-illustration.png')}
           style={styles.heroImage}
           resizeMode="contain"
         />
@@ -43,14 +41,14 @@ export default function AuthScreen() {
       {/* Sign in */}
       <View style={styles.footer}>
         {loading ? (
-          <ActivityIndicator size="large" color={COLORS.primary} style={{ height: 52 }} />
+          <ActivityIndicator size="large" color={COLORS.primary} style={{ height: 56 }} />
         ) : (
-          <GoogleSigninButton
-            style={styles.googleBtn}
-            size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.Light}
-            onPress={handleGoogleSignIn}
-          />
+          <TouchableOpacity style={styles.googleBtn} onPress={handleGoogleSignIn} activeOpacity={0.85}>
+            <View style={styles.googleLogo}>
+              <Text style={styles.googleG}>G</Text>
+            </View>
+            <Text style={styles.googleBtnText}>Sign in with Google</Text>
+          </TouchableOpacity>
         )}
         <Text style={styles.legal}>
           By signing in you agree to use Habis First only for household pantry tracking.
@@ -90,7 +88,30 @@ const styles = StyleSheet.create({
   },
 
   footer: { alignItems: 'center', gap: 12 },
-  googleBtn: { width: '100%', height: 52 },
+
+  googleBtn: {
+    flexDirection: 'row', alignItems: 'center',
+    width: '100%', paddingVertical: 15, paddingHorizontal: 20,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.xl,
+    borderWidth: 1.5, borderColor: COLORS.border,
+    ...SHADOWS.sm,
+    gap: 12,
+  },
+  googleLogo: {
+    width: 28, height: 28, borderRadius: 14,
+    backgroundColor: COLORS.background,
+    justifyContent: 'center', alignItems: 'center',
+    borderWidth: 1, borderColor: COLORS.border,
+  },
+  googleG: {
+    fontFamily: 'Inter_700Bold', fontSize: 15, color: '#4285F4',
+  },
+  googleBtnText: {
+    fontFamily: 'Inter_600SemiBold', fontSize: 16, color: COLORS.text,
+    flex: 1, textAlign: 'center', marginRight: 28,
+  },
+
   legal: {
     ...TYPOGRAPHY.caption, color: COLORS.lightGray,
     textAlign: 'center', lineHeight: 18,
