@@ -1,8 +1,8 @@
-# 🥦 UseItUp
+# 🥦 Habis First — Use what you have, first.
 
-A family pantry manager that helps households waste less food. Log what's in your fridge, get alerted before things expire, and find recipes based on what you already have.
+A family pantry manager that helps Malaysian households waste less food. Log what's in your fridge, get alerted before things expire, and find recipes based on what you already have.
 
-iOS-first
+Built with React Native · iOS-first
 
 ---
 
@@ -41,7 +41,7 @@ iOS-first
 
 ```bash
 git clone https://github.com/wongcarmennn/Use_It_Up.git
-cd UseItUp
+cd Use_It_Up
 npm install
 ```
 

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "UseItUp",
-    "slug": "useitup",
+    "name": "Habis First",
+    "slug": "habis-first",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,7 +15,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "UseItUp needs camera access to scan barcodes."
+          "cameraPermission": "Habis First needs camera access to scan barcodes."
         }
       ],
       [
@@ -31,7 +31,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#2D6A4F"
       },
-      "package": "com.useitup.app",
+      "package": "com.habisfirst.app",
       "permissions": [
         "CAMERA",
         "RECEIVE_BOOT_COMPLETED",
@@ -41,9 +41,9 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.useitup.app",
+      "bundleIdentifier": "com.habisfirst.app",
       "infoPlist": {
-        "NSCameraUsageDescription": "UseItUp needs camera access to scan barcodes.",
+        "NSCameraUsageDescription": "Habis First needs camera access to scan barcodes.",
         "CFBundleURLTypes": [
           {
             "CFBundleURLSchemes": [

@@ -52,7 +52,7 @@ function PantryStackNavigator() {
         headerShadowVisible: false,
       }}
     >
-      <PantryStack.Screen name="PantryHome" component={PantryScreen} options={{ title: '🥦  UseItUp' }} />
+      <PantryStack.Screen name="PantryHome" component={PantryScreen} options={{ title: '🥦  Habis First' }} />
       <PantryStack.Screen name="ItemDetail" component={ItemDetailScreen} options={{ title: 'Item Details' }} />
       <PantryStack.Screen name="AddItem" component={AddItemScreen} options={{ title: 'Add Item' }} />
       <PantryStack.Screen name="Scanner" component={ScannerScreen} options={{ headerShown: false }} />
