@@ -40,7 +40,7 @@ iOS-first
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/UseItUp.git
+git clone https://github.com/wongcarmennn/Use_It_Up.git
 cd UseItUp
 npm install
 ```
